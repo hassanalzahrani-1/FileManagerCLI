@@ -1,3 +1,21 @@
-/.pytest_cache
-/.venv
-src/filebunny/__pycache__/*
+# Python cache directories
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db*
