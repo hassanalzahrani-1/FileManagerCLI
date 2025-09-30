@@ -30,7 +30,7 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Cross Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](https://github.com/HassanAlzahrani-1/filebunny)
+[![Cross Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](https://github.com/HassanAlzahrani-1/FileManagerCLI)
 
 ## ✨ Features
 
@@ -49,8 +49,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/filebunny.git
-cd filebunny
+git clone https://github.com/hassanalzahrani-1/FileManagerCLI.git
+cd FileManagerCLI
 
 # Create virtual environment
 python -m venv .venv
