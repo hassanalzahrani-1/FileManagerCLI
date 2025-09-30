@@ -1,4 +1,4 @@
-# filebunny 🗂️
+# filebunny 🐰
 
 ```
 ⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣦⣤⣄⡀⠀⠀⠀⠀⢀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -26,94 +26,268 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣶⣤⣀⣦⣴⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ```
 
-**A Bunny CLI file manager**
+**A Bunny CLI file manager** - Navigate your filesystem with bunny-themed commands and an interactive burrow experience.
 
-## Setup
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Cross Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](https://github.com/HassanAlzahrani-1/filebunny)
+
+## ✨ Features
+
+- **🏠 Interactive Burrow**: Enter a subshell with prefix-free commands (PowerShell/Bash)
+- **📍 Persistent State**: Remembers your last location between sessions
+- **🔍 Smart Navigation**: `hop` to directories, `spot` your current location
+- **📂 File Operations**: Copy, move, rename, delete with bunny-themed commands
+- **🛠️ Developer Tools**: Comprehensive logging with decorators and verbose mode
+- **🎨 Beautiful CLI**: ASCII art header and clean, colorful output
+- **🧪 Well Tested**: 29 comprehensive tests covering all functionality
+- **⚡ Cross Platform**: Works seamlessly on Windows, Linux, and macOS
+
+## 🚀 Quick Start
+
+### Installation
+
 ```bash
-python -m venv .venv
-# Windows: .venv\Scripts\activate
-# Linux/macOS: source .venv/bin/activate
+# Clone the repository
+git clone https://github.com/yourusername/filebunny.git
+cd filebunny
 
+# Create virtual environment
+python -m venv .venv
+
+# Activate virtual environment
+# Windows:
+.venv\Scripts\activate
+# Linux/macOS:
+source .venv/bin/activate
+
+# Install in development mode
+pip install --upgrade pip setuptools wheel
 pip install -e .
 ```
 
-## Usage
-
-### Enter the burrow (subshell)
-
-Just run:
-```bash
-filebunny
-```
-This opens a subshell at your current "bunny spot".
-
-- On Windows (PowerShell) and bash: prefix-free helpers are available inside the burrow.
-  - `spot`, `hop`, `peek`, `dig`, `carrot`, `copy`, `move`, `rename`, `bury`
-
-Exit the subshell to return to your original shell.
-
-### Top-level help
+### First Run
 
 ```bash
+# See help and the beautiful bunny header
 filebunny -h
-```
-Prints a bunny header with a quick command guide and version line.
 
-### Core Commands (outside or inside burrow)
+# Enter the interactive burrow
+filebunny
+
+# Inside the burrow, use commands without the 'filebunny' prefix:
+spot                    # Show current location
+hop ~/Documents         # Navigate to Documents
+peek -al               # List all files (including hidden)
+dig projects           # Create directory
+carrot readme.txt      # Create file
+leave                  # Exit the burrow
+```
+
+## 📖 Command Reference
+
+### Core Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `spot` | Show current directory (absolute path) | `filebunny spot` |
+| `hop [path]` | Navigate to directory, updates bunny spot | `filebunny hop ../projects` |
+| `peek [-al]` | List directory contents (PowerShell-style) | `filebunny peek -al` |
+| `dig <dir>` | Create directory (mkdir -p) | `filebunny dig new/nested/dir` |
+| `carrot <file>` | Create/touch file (parents auto-created) | `filebunny carrot notes/todo.txt` |
+| `copy <src> <dst>` | Copy file or directory | `filebunny copy file.txt backup/` |
+| `move <src> <dst>` | Move file or directory | `filebunny move old/ archive/` |
+| `rename <src> <dst>` | Rename file or directory | `filebunny rename draft.txt final.txt` |
+| `bury <path>` | Delete file or directory | `filebunny bury temp/` |
+
+### Burrow Commands (Inside Interactive Mode)
+
+| Command | Description |
+|---------|-------------|
+| `leave` | Exit the burrow |
+| `leave -d` | Hop back to origin directory before exiting |
+
+### Global Flags
+
+| Flag | Description | Example |
+|------|-------------|---------|
+| `-h, --help` | Show help message | `filebunny -h` |
+| `-v, --version` | Show version | `filebunny --version` |
+| `-V, --verbose` | Enable verbose logging for decorators | `filebunny -V hop ..` |
+
+## 🏗️ Architecture
+
+### Project Structure
+
+```
+filebunny/
+├── src/filebunny/           # Main package
+│   ├── __init__.py          # Package initialization (version: 1.0.0)
+│   ├── cli.py               # CLI interface and subshell management
+│   ├── manager.py           # Core FileManager class with operations
+│   ├── storage.py           # State persistence using platformdirs
+│   └── utils.py             # Logging decorators and utilities
+├── tests/                   # Comprehensive test suite
+│   ├── test_cli.py          # CLI and integration tests (29 tests)
+│   └── test_manager.py      # FileManager unit tests
+├── pyproject.toml           # Modern Python packaging configuration
+└── README.md               # This file
+```
+
+### Core Components
+
+#### 🎯 FileManager (`manager.py`)
+The heart of filebunny, providing all file operations with decorator-based logging:
+
+```python
+from filebunny.manager import FileManager
+from filebunny.storage import Storage
+
+fm = FileManager(Storage())
+fm.hop("~/projects")        # Navigate and persist state
+fm.dig("new-project")       # Create directory
+fm.carrot("README.md")      # Create file
+```
+
+#### 💾 State Management (`storage.py`)
+Cross-platform state persistence using `platformdirs`:
+- **Windows**: `%APPDATA%\filebunny\spot.json`
+- **Linux**: `~/.config/filebunny/spot.json`
+- **macOS**: `~/Library/Application Support/filebunny/spot.json`
+
+#### 🔧 Logging System (`utils.py`)
+Three powerful decorators for comprehensive operation tracking:
+- `@log_call`: Logs function calls with arguments
+- `@log_timing`: Measures and logs execution time
+- `@log_errors`: Catches and logs exceptions
+
+#### 🖥️ CLI Interface (`cli.py`)
+Advanced CLI with subshell support:
+- **Direct commands**: `filebunny hop ~/docs`
+- **Interactive burrow**: `filebunny` (launches subshell)
+- **Shell helpers**: PowerShell and Bash function injection
+- **Nested prevention**: Blocks multiple burrow levels
+
+## 🔧 Advanced Usage
+
+### Verbose Mode
+
+Enable detailed logging to see what's happening under the hood:
 
 ```bash
-filebunny spot             # Show current directory (absolute path)
-filebunny hop projects     # Change into a folder (prints resolved path)
-filebunny hop ..           # Go up one level
-filebunny peek             # List contents (PowerShell-style long view)
-filebunny peek -al         # Include dot-prefixed (hidden) entries
+# Verbose for single command
+filebunny -V hop ~/projects
 
-filebunny dig notes        # Create directory (mkdir -p)
-filebunny carrot notes/todo.txt   # Create/touch file (parents auto-created)
-
-filebunny copy a.txt b.txt
-filebunny move b.txt backup/
-filebunny rename backup/b.txt b_old.txt
-filebunny bury b_old.txt
+# Verbose for entire burrow session
+filebunny -V
+# Now all commands in the burrow show detailed logs
+hop documents
+dig new-folder
+leave  # Verbose mode ends
 ```
 
-State (your "last spot") is stored automatically in your OS's config folder.
+### Environment Variables
 
-### Version
+Control logging behavior:
 
 ```bash
-filebunny --version
+# Set log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+export FILEBUNNY_LOG_LEVEL=DEBUG
+filebunny hop ..
+
+# Legacy verbose flag
+export FILEBUNNY_VERBOSE=1
+filebunny spot
 ```
 
-## Notes
+### Scripting
 
-- **Output policy**: Success prints go to stdout (clean and scriptable). Errors go to stderr with non-zero exit codes.
-- Inside the burrow on PowerShell/bash, you can use the helpers without the `filebunny` prefix:
-  ```powershell
-  hop ..
-  peek -al
-  dig notes
-  carrot notes/todo.txt
-  ```
-- **No nested burrows**: launching `filebunny` inside the burrow is blocked to avoid confusing multiple prompts. Use `leave` (or `leave -d` to revert to origin) to exit.
-- **Verbosity**: Enable detailed logs by setting `FILEBUNNY_VERBOSE=1` in your environment.
+filebunny is designed for both interactive and scripted use:
 
-## Features
-
-- **Cross-platform**: Works on Windows, Linux, and macOS
-- **Persistent state**: Remembers your last location between sessions
-- **Logging**: All operations are logged with timing information
-- **Clean architecture**: Modern Python with type hints and dataclasses
-- **Safe operations**: Atomic file writes and proper error handling
-
-## Development
-
-To run tests:
 ```bash
-pytest tests/
+#!/bin/bash
+# Setup project structure
+filebunny dig myproject/src
+filebunny dig myproject/tests
+filebunny carrot myproject/README.md
+filebunny carrot myproject/src/__init__.py
+
+# Navigate and continue work
+filebunny hop myproject
+current=$(filebunny spot)
+echo "Working in: $current"
 ```
 
-To see logs:
+## 🧪 Development
+
+### Running Tests
+
 ```bash
-FILEBUNNY_VERBOSE=1 filebunny hop projects  # Check your terminal for log output
+# Activate virtual environment first
+source .venv/bin/activate  # Linux/macOS
+# or
+.venv\Scripts\activate     # Windows
+
+# Run all tests
+pytest -q
+
+# Run with verbose output
+pytest -v
+
+# Run specific test file
+pytest tests/test_cli.py -v
+
+# Run with coverage
+pip install pytest-cov
+pytest --cov=filebunny tests/
 ```
+
+### Test Coverage
+
+The project includes comprehensive tests covering:
+- ✅ All CLI commands and flags
+- ✅ Interactive burrow functionality  
+- ✅ File operations (copy, move, delete, create)
+- ✅ Directory operations (recursive copy/delete)
+- ✅ State persistence and recovery
+- ✅ Verbose logging and environment controls
+- ✅ Error handling and edge cases
+- ✅ Cross-platform compatibility
+
+### Code Quality
+
+```bash
+# Install development dependencies
+pip install ruff mypy
+
+# Lint code
+ruff check .
+
+# Type checking
+mypy src/filebunny
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Make your changes and add tests
+4. Run the test suite: `pytest -q`
+5. Commit your changes: `git commit -am 'Add feature'`
+6. Push to the branch: `git push origin feature-name`
+7. Submit a pull request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with modern Python packaging standards
+- Uses `platformdirs` for cross-platform config storage
+- Inspired by the need for a friendly, intuitive file manager CLI
+- ASCII art bunny designed for maximum cuteness 🐰
+
+---
+
+**Happy hopping! 🐰✨**

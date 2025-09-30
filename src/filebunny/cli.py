@@ -65,10 +65,14 @@ Core Commands
 - move <src> <dst>    Move file/folder.
 - rename <src> <dst>  Rename file/folder.
 - bury <path>         Bury (delete) file/folder.
+- leave               Exit the burrow.
+- leave -d            Hop back to origin before exiting.
 
 Tips
 ----
 - Help: filebunny -h  |  filebunny <command> -h
+- Version: filebunny -v  |  filebunny --version
+- Verbose decorators: filebunny -V  (enabled for this run or the whole burrow)
 """)
 
 def main():
@@ -87,7 +91,7 @@ def main():
     sub = parser.add_subparsers(dest="cmd", required=False)
 
     # spot command - show current directory
-    p_spot = sub.add_parser("spot", help="Show current directory")
+    sub.add_parser("spot", help="Show current directory")
     p_hop = sub.add_parser("hop", help="Change directory")
     p_hop.add_argument("path", nargs="?", help="Path to hop to (default: home)")
 
@@ -370,7 +374,8 @@ def main():
                 paths = [p for p in paths if not p.name.startswith('.')]
 
             # Header
-            print() ; print()
+            print()
+            print()
             print(f"Dig: {root}")
             print()
             print(f"{'Mode':<6}  {'LastWriteTime':<22}  {'Length':>10} {'Name'}")
@@ -397,7 +402,8 @@ def main():
                 except OSError as e:
                     # On error stat'ing an entry, show minimal info
                     sys.stderr.write(f"peek error: {p.name}: {e}\n")
-            print() ; print()
+            print()
+            print()
         case "copy": 
             fm.copy(args.src, args.dst)
             print(f"Copied {args.src} to {args.dst}")
