@@ -49,8 +49,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/filebunny.git
-cd filebunny
+git clone https://github.com/hassanalzahrani-1/FileManagerCLI.git
+cd FileManagerCLI
 
 # Create virtual environment
 python -m venv .venv
